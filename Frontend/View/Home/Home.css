@@ -1,0 +1,373 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Heebo", sans-serif;
+  background: black;
+  overflow-x: hidden;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2000;
+  --header-height: 64px;
+  background: transparent;   
+  box-shadow: none;          
+}
+
+.header {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar {
+  display: flex;
+  gap: 2rem;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: #fff;
+  margin-left: 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: .3s;
+  position: relative;
+  padding-bottom: 5px;
+}
+
+.navbar a:hover {
+  color: #ccc;
+}
+
+.navbar a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  height: 2px;
+  background: #ccc;
+  transition: width 0.3s ease;
+}
+
+.navbar a:hover::after {
+  width: 100%;
+}
+
+.header img {
+  width: 40px;
+  height: auto;
+}
+
+.nav_icons i {
+  margin-left: 1.5rem;
+  font-size: 1rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+.home,
+.swiper,
+.swiper-slide {
+  width: 100%;
+  height: 100vh;
+}
+
+.bg1 {
+  background: url("https://cdn.runrepeat.com/storage/gallery/product_content/37453/air-jordan-1-low-review-21512356-main.jpg") no-repeat center/cover;
+}
+
+.bg2 {
+  background: url("https://static.nike.com/a/images/f_auto,cs_srgb/w_1920,c_limit/77e79006-1593-4174-8aa5-bdce318eb28b/air-jordan-1-2022-lost-and-found-chicago-the-inspiration-behind-the-design.jpg") no-repeat center/cover;
+}
+
+.bg3 {
+  background: url("https://wallpapers.com/images/hd/travis-scott-jordan-1-7494-x-4999-wallpaper-vm9bpz4yc61inpbu.jpg") no-repeat center/cover;
+}
+
+.bg4 {
+  background: url("https://wallpapercave.com/wp/wp4312502.jpg") no-repeat center/cover;
+}
+
+.bg5 {
+  background: url("https://wallpapercave.com/wp/wp9092642.jpg") no-repeat center/cover;
+}
+
+.bg6 {
+  background: url("https://www.highsnobiety.com/static-assets/dato/1632614962-sneaker-reselling-feat2.jpg") no-repeat center/cover;
+}
+
+.bg7 {
+  background: url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi_tc0x9yluZLasDaTjvEGv6sA5h51AtWPYXm4b6nbLIJGufR9ENJJxjVyw6aMOG5yXl2tNLhC1sVtJTNpULK2g73ilpbRHb9tQregm1Dlixl1uZwEwm1myZZg5A1mEdZQDwnW9NJOjVls/s1600/IMG_3298.jpg") no-repeat center/cover;
+}
+
+.bg8 {
+  background: url("https://media.sketchfab.com/models/e398b13ac39d4a14b2e907f82de9cf07/thumbnails/03047ca636a6421c8c4b4fec360e4cf7/b06a1657732c4436a76061e3ced1e6c0.jpeg") no-repeat center/cover;
+}
+
+.bg9 {
+  background: url("https://static.nike.com/a/images/f_auto,cs_srgb/w_1920,c_limit/7b53da44-6c68-4efa-8164-fcdb735c7b3c/le-scarpe-pi%C3%B9-memorabili-indossate-da-mj-in-the-last-dance.jpg") no-repeat center/cover;
+}
+
+
+.title {
+  position: absolute;
+  bottom: 15%;
+  left: 10%;
+  color: #fff;
+}
+
+.title h2 {
+  font-size: 2rem;
+  margin-bottom: .5rem;
+}
+
+.title p {
+  font-size: 1.2rem;
+}
+
+.swiper-pagination {
+  right: 20px;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #ff0000 !important;
+}
+
+.menu-item {
+  position: relative;
+}
+
+.mega-menu {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  width: 100%;
+  background: #fff;
+  padding: 2rem 0;
+  display: none;
+  z-index: 1900;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.mega-menu .container .row > div {
+  padding: 1rem;
+  text-align: center;
+  border: 1px solid #eee;
+  background: #fafafa;
+}
+
+.home {
+  margin-top: 0;
+}
+
+.menu-card {
+  display: flex;
+  flex-direction: row;   
+  align-items: center;   
+  gap: 0.5rem;              
+  padding: 0.4rem 0.8rem;   
+  background: #fafafa;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.menu-card img {
+  width: 40px;          
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.menu-card p {
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.menu-item:hover ~ .nav_icons i,
+.menu-item:hover > a,
+.menu-item:hover .mega-menu {
+  color: #000 !important;
+  fill: #000;
+}
+
+.menu-item:hover ~ .nav_icons i {
+  color: #000; 
+}
+
+.menu-item:hover .mega-menu,
+.menu-item:hover ~ .nav_icons,
+.menu-item:hover {
+  background: #fff;
+}
+
+header:hover {
+  background: #fff;          
+}
+
+header:hover .navbar a,
+header:hover .nav_icons i {
+  color: #000;             
+}
+
+header:hover .navbar a::after {
+  background: #000;          
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 40px;        
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+  z-index: 2000;
+}
+
+.bottom-nav .nav-item {
+  width: 50px;
+  height: 50px;
+  background: white;        
+  border-radius: 50%;       
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: black;              
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.bottom-nav .nav-item:hover {
+  background: black;
+  color: white;
+}
+
+
+:root { --header-height: 64px; }
+
+.search-overlay {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  height: calc(100vh - var(--header-height));
+  background: rgba(255,255,255,1); 
+  z-index: 4000;
+  display: none;            
+  flex-direction: column;
+  justify-content: space-between;
+  color: #111;
+  overflow: hidden;
+  padding: 20px 40px;
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+
+.search-overlay.show {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.search-container { display:flex; flex-direction:column; height:100%; }
+.suggested-products { flex:1; overflow-y:auto; padding: 8px 0; }
+.suggested-products h3 { font-size:1.1rem; margin-bottom:12px; color:#333; }
+.product-list { display:flex; gap:16px; flex-wrap:wrap; }
+.product-item { width:120px; text-align:center; }
+.product-item img { width:100%; height:100px; object-fit:cover; border-radius:8px; }
+.product-item p { margin-top:6px; color:#333; font-size:0.95rem; }
+
+
+.search-input-area {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px;
+  border-top: 1px solid #eee;
+  background: #fff;
+}
+.search-input-area input {
+  flex:1;
+  padding:10px 12px;
+  border-radius:8px;
+  border:1px solid #ddd;
+  outline:none;
+  font-size:16px;
+}
+.search-input-area .close-search {
+  background:none;
+  border:1px solid #ddd;
+  width:44px; height:44px; border-radius:50%;
+  cursor:pointer; font-size:18px;
+}
+
+
+@media (max-width: 900px) {
+  .search-overlay { padding:12px; }
+  .product-item { width:30%; }
+}
+
+.products h2 {
+    margin-top: 25px;
+    font-weight: bold;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.card {
+    border: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-img-top {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.card-body {
+    padding-top: 1rem;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #333;
+    font-weight: 500;
+}
+
+
+
+
