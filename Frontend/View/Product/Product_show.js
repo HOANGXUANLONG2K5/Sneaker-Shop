@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             </a>
             <div class="card-body text-center">
               <h5 class="card-title">${product.TenSanPham}</h5>
-             <p class="card-text">${price.toLocaleString('vi-VN')} VND</p>
+              <p class="card-text">${price.toLocaleString('vi-VN')} VND</p>
             </div>
           </div>
         </div>`;

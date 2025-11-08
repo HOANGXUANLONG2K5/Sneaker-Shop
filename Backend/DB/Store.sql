@@ -199,8 +199,49 @@ VALUES
 (1, 1, 1, 'Xin chào! Tôi cần hỗ trợ đơn hàng.', NOW(), 'Đã gửi'),
 (1, 1, 1, 'Admin: Chúng tôi sẽ kiểm tra ngay.', NOW(), 'Đã xem');
 
-SELECT * FROM SneakerStore.SanPham LIMIT 1000;
+SELECT * FROM SneakerStore.NguoiDung LIMIT 1000;
 
 UPDATE SanPham
 SET Anh = 'https://authentic-shoes.com/wp-content/uploads/2023/04/816352_01.jpg_cc33f27d80df4f98aa08ce4d6c5fcc90.png'
 WHERE MaSanPham = 2;
+
+
+SELECT sp.*, ct.GiaXuat, ct.GiaNhap, ct.SoLuong
+FROM SanPham sp
+LEFT JOIN ChiTietSanPham ct ON sp.MaSanPham = ct.MaSanPham
+WHERE sp.MaSanPham = 2;
+
+SELECT sp.*, ct.KichThuoc, ct.GiaXuat, ct.GiaNhap, ct.SoLuong
+    FROM SanPham sp
+    LEFT JOIN ChiTietSanPham ct ON sp.MaSanPham = ct.MaSanPham
+    WHERE sp.MaSanPham = 2
+    
+SELECT 
+    gh.MaGioHang,
+    gh.MaNguoiDung,
+    cthp.MaChiTietSanPham,
+    sp.TenSanPham,
+    cthp.KichThuoc,
+    ctgh.SoLuong
+FROM GioHang gh
+JOIN ChiTietGioHang ctgh ON gh.MaGioHang = ctgh.MaGioHang
+JOIN ChiTietSanPham cthp ON ctgh.MaChiTietSanPham = cthp.MaChiTietSanPham
+JOIN SanPham sp ON cthp.MaSanPham = sp.MaSanPham;
+
+SELECT * FROM ChiTietGioHang WHERE MaGioHang = 1;
+
+SELECT ct.MaChiTietGioHang,
+       ct.MaGioHang,
+       ct.MaChiTietSanPham,
+       ct.SoLuong,
+       sp.TenSanPham,
+       cts.KichThuoc,
+       cts.GiaXuat
+FROM ChiTietGioHang ct
+JOIN ChiTietSanPham cts ON ct.MaChiTietSanPham = cts.MaChiTietSanPham
+JOIN SanPham sp ON cts.MaSanPham = sp.MaSanPham
+WHERE ct.MaGioHang IN (
+    SELECT MaGioHang 
+    FROM GioHang 
+    WHERE MaNguoiDung = 1
+);

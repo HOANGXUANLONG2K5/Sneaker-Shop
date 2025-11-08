@@ -1,30 +1,46 @@
-// Product_detail.js
+document.addEventListener("DOMContentLoaded", () => {
+  const addToCartBtn = document.getElementById("addToCartBtn");
 
-document.addEventListener("DOMContentLoaded", function () {
-  const addToCartBtn = document.querySelector(".product-info .btn-dark.w-100.py-2.mt-2");
-
-  addToCartBtn.addEventListener("click", function () {
-    const name = document.querySelector(".product-info h3").textContent;
-    const price = document.querySelector(".product-info h4").textContent;
-    const image = document.querySelector(".product-thumbnail").src;
-
-    // Tạo object sản phẩm
-    const product = { name, price, image, quantity: 1 };
-
-    // Lấy giỏ hàng từ localStorage (nếu có)
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    // Nếu đã có sản phẩm trong giỏ -> tăng số lượng
-    const existing = cart.find(item => item.name === name);
-    if (existing) {
-      existing.quantity += 1;
-    } else {
-      cart.push(product);
+  addToCartBtn.addEventListener("click", async () => {
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get("id");
+    const selectedSizeBtn = document.querySelector(".btn-outline-dark.btn-sm.active");
+    
+    if (!selectedSizeBtn) {
+      alert("Vui lòng chọn kích thước!");
+      return;
     }
 
-    // Lưu lại giỏ hàng
-    localStorage.setItem("cart", JSON.stringify(cart));
+    const kichThuoc = selectedSizeBtn.textContent.trim();
+    const soLuong = 1; // mặc định 1
+    const maNguoiDung = 1; // tạm thời hardcode, sau sẽ lấy từ session khi có login
 
-    alert("Đã thêm vào giỏ hàng!");
+    try {
+      const res = await fetch("http://localhost:3000/api/cart/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ maNguoiDung, productId, kichThuoc, soLuong })
+      });
+
+      const result = await res.json();
+      if (res.ok) {
+        alert("Đã thêm sản phẩm vào giỏ hàng!");
+        console.log("Cart:", result);
+      } else {
+        alert(result.message || "Lỗi khi thêm vào giỏ hàng!");
+      }
+    } catch (err) {
+      console.error("Lỗi khi gửi yêu cầu:", err);
+      alert("Không thể kết nối tới server!");
+    }
+  });
+
+  // hiệu ứng chọn size
+  const sizeButtons = document.querySelectorAll(".btn-outline-dark.btn-sm");
+  sizeButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      sizeButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
   });
 });
