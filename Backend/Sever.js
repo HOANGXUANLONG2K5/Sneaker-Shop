@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const userRoutes = require('./Route/Nguoidung');
 const productRoutes = require('./Route/SanPham');
+const productDetailRoutes = require('./Route/ChiTietSanPham');
 
 const app = express();
 const port = 3000;
@@ -13,5 +14,6 @@ app.use(bodyParser.json());
 
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/productdetails', productDetailRoutes);
 
 app.listen(port, () => console.log(`Server chạy tại http://localhost:${port}`));

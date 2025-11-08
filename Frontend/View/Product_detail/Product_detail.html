@@ -40,33 +40,31 @@
 
                 <!-- Phần hình ảnh hoặc model -->
                 <div class="col-md-7">
-                    <div class="model-wrapper shadow-sm overflow-hidden rounded-3 mb-4">
-                        <iframe
+                    <div id="product-model" class="model-wrapper shadow-sm overflow-hidden rounded-3 mb-4">
+                        <!-- <iframe
                             src="https://sketchfab.com/models/1caecac41d3a40b4ac49c98e42608e0f/embed?autostart=1&camera=0&ui_hint=2"
                             width="100%" height="500" frameborder="0" allow="autoplay; fullscreen; vr"
                             class="w-100 rounded-3">
-                        </iframe>
+                        </iframe> -->
 
                         <img src="https://anchuongshoes.vn/storage/2021/05/travis-scott-jordan-1-anchuongshoes.jpg"
                             alt="Jordan 1 Travis Scott" style="display:none;" class="product-thumbnail">
                     </div>
 
-                    <div class="product-info-block mt-4">
-                        <h4>Mô tả</h4>
-                        <p>Mã sản phẩm: JD123</p>
-                        <p>Limited</p>
+                    <div id="product-info" class="product-info-block mt-4">
+
                     </div>
 
-                    <div class="product-info-block">
-                        <h4>Chi tiết</h4>
+                    <div id="product-detail" class="product-info-block">
+                        <!-- <h4>Chi tiết</h4>
                         <ul>
                             <li>Chất liệu: Da</li>
                             <li>Sản xuất: Trung Quốc</li>
                             <li>Kiểu dáng: High</li>
-                        </ul>
+                        </ul> -->
                     </div>
 
-                    <div class="reviews-list mt-5">
+                    <div id="near-comment" class="reviews-list mt-5">
                         <h4 class="mb-4">Các đánh giá gần đây</h4>
                         <div id="reviewContainer"></div>
                         <div class="text-center mt-3">
@@ -75,7 +73,7 @@
                         </div>
                     </div>
 
-                    <div class="product-review mt-5">
+                    <div id="comment" class="product-review mt-5">
                         <h3>Đánh giá</h3>
                         <div class="mb-3">
                             <label class="form-label d-block">Chọn số sao</label>
@@ -100,15 +98,9 @@
 
                 <!-- Thông tin sản phẩm -->
                 <div class="col-md-5">
-                    <div class="product-info">
-                        <h3>Jordan 1 Travis Scott</h3>
-                        <p class="text-muted">Mã sản phẩm: JD123</p>
-                        <h4 class="text-danger mb-3">50.000.000 VND</h4>
-
-                        <div class="mb-3">
-                            <label class="form-label">Màu sắc:</label><br>
-                            <button class="btn btn-outline-dark btn-sm">Đen</button>
-                            <button class="btn btn-outline-secondary btn-sm">Trắng</button>
+                    <div id="product-choose" class="product-info">
+                        <div id="product-basic-info">
+                            
                         </div>
 
                         <div class="mb-3">
@@ -133,8 +125,8 @@
     <section class="products container my-5">
         <h2 class="mb-4 text-center">Các hãng khác</h2>
 
-        <div class="row g-4">
-            <div class="col-6 col-md-3">
+        <div id="product-other" class="row g-4">
+            <!--  <div class="col-6 col-md-3">
                 <div class="card h-100">
                     <a href="../Product_detail/Product_detail.html">
                         <img src="https://sneakerholicvietnam.vn/wp-content/uploads/2023/12/air-jordan-1-mid-panda-dv0991-101-copy.jpg"
@@ -184,7 +176,7 @@
                         <p class="card-text">6,399,000 VND</p>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
         </div>
 
@@ -358,6 +350,8 @@
     <script src="Choose_star.js"></script>
     <script src="Product_detail_comment.js"></script>
     <script src="Product_cart.js"></script>
+    <script src="Product_detail_show.js"></script>
+    <script src="../Product/Product_show.js"></script>
 </body>
 
 </html>
