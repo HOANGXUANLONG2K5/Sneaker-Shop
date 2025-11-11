@@ -1,50 +1,50 @@
 const db = require("../DB/Connect");
 
+
 // Thêm sản phẩm vào giỏ hàng
 exports.addToCart = (req, res) => {
-  const { maNguoiDung, productId, kichThuoc, soLuong } = req.body;
+  const { MaNguoiDung, MaChiTietSanPham, SoLuong } = req.body;
 
-  if (!maNguoiDung || !productId || !kichThuoc || !soLuong) {
-    return res.status(400).json({ message: "Thiếu dữ liệu!" });
+  console.log("BODY NHẬN ĐƯỢC:", req.body); // debug
+
+  if (!MaNguoiDung) {
+    console.log("Thiếu MaNguoiDung:", MaNguoiDung);
+    return res.status(400).json({ message: "Thiếu MaNguoiDung!" });
   }
 
-  // Kiểm tra chi tiết sản phẩm
-  const sqlFind = `
-    SELECT ct.MaChiTietSanPham 
-    FROM ChiTietSanPham ct
-    WHERE ct.MaSanPham = ? AND ct.KichThuoc = ?;
-  `;
+  if (!MaChiTietSanPham) {
+    console.log("Thiếu MaChiTietSanPham:", MaChiTietSanPham);
+    return res.status(400).json({ message: "Thiếu MaChiTietSanPham!" });
+  }
 
-  db.query(sqlFind, [productId, kichThuoc], (err, result) => {
+  if (!SoLuong) {
+    console.log("Thiếu SoLuong:", SoLuong);
+    return res.status(400).json({ message: "Thiếu SoLuong!" });
+  }
+
+
+  // Kiểm tra giỏ hàng của người dùng
+  const sqlCart = `SELECT MaGioHang FROM GioHang WHERE MaNguoiDung = ?`;
+  db.query(sqlCart, [MaNguoiDung], (err, cartResult) => {
     if (err) return res.status(500).json({ message: "Lỗi SQL", error: err });
-    if (result.length === 0)
-      return res.status(404).json({ message: "Không tìm thấy sản phẩm với kích thước này!" });
 
-    const maChiTietSP = result[0].MaChiTietSanPham;
+    const maGioHang = cartResult.length === 0 ? null : cartResult[0].MaGioHang;
 
-    // Kiểm tra giỏ hàng của người dùng
-    const sqlCart = `SELECT MaGioHang FROM GioHang WHERE MaNguoiDung = ?`;
-    db.query(sqlCart, [maNguoiDung], (err, cartResult) => {
-      if (err) return res.status(500).json({ message: "Lỗi SQL", error: err });
-
-      const maGioHang = cartResult.length === 0
-        ? null
-        : cartResult[0].MaGioHang;
-
-      if (!maGioHang) {
-        // Nếu chưa có giỏ → tạo mới
-        const sqlCreateCart = `INSERT INTO GioHang (MaNguoiDung) VALUES (?)`;
-        db.query(sqlCreateCart, [maNguoiDung], (err, insertResult) => {
-          if (err) return res.status(500).json({ message: "Không tạo được giỏ hàng", error: err });
-          themVaoChiTiet(insertResult.insertId, maChiTietSP, soLuong, res);
-        });
-      } else {
-        // Nếu đã có giỏ → thêm hoặc cập nhật
-        themVaoChiTiet(maGioHang, maChiTietSP, soLuong, res);
-      }
-    });
+    if (!maGioHang) {
+      // Tạo giỏ mới
+      const sqlCreateCart = `INSERT INTO GioHang (MaNguoiDung) VALUES (?)`;
+      db.query(sqlCreateCart, [MaNguoiDung], (err, insertResult) => {
+        if (err) return res.status(500).json({ message: "Không tạo được giỏ hàng", error: err });
+        themVaoChiTiet(insertResult.insertId, MaChiTietSanPham, SoLuong, res);
+      });
+    } else {
+      // Thêm hoặc cập nhật giỏ
+      themVaoChiTiet(maGioHang, MaChiTietSanPham, SoLuong, res);
+    }
   });
 };
+
+
 
 // Lấy toàn bộ giỏ hàng (demo)
 exports.getCart = (req, res) => {
@@ -112,6 +112,31 @@ exports.getCartByUser = (req, res) => {
     res.json(result);
   });
 };
+
+// Cart.js (controller)
+
+exports.deleteCartItem = (req, res) => {
+    const { MaChiTietSanPham, MaNguoiDung } = req.body; // hoặc req.params nếu dùng params
+
+    if (!MaChiTietSanPham || !MaNguoiDung) {
+        return res.status(400).json({ message: 'Thiếu thông tin xóa sản phẩm' });
+    }
+
+    const sql = `
+        DELETE FROM ChiTietGioHang 
+        WHERE MaChiTietSanPham = ? 
+        AND MaGioHang IN (
+            SELECT MaGioHang FROM GioHang WHERE MaNguoiDung = ?
+        )
+    `;
+
+    db.query(sql, [MaChiTietSanPham, MaNguoiDung], (err, result) => {
+        if (err) return res.status(500).json({ message: 'Lỗi SQL khi xóa', error: err });
+        if (result.affectedRows === 0) return res.status(404).json({ message: 'Không tìm thấy sản phẩm trong giỏ hàng' });
+        res.json({ message: 'Xóa sản phẩm thành công!' });
+    });
+};
+
 
 
 

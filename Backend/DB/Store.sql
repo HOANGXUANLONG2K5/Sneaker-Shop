@@ -1,4 +1,4 @@
-CREATE DATABASE SneakerStore
+CREATE DATABASE SneakerStore;
 Use SneakerStore;
 
 CREATE TABLE NguoiDung(
@@ -228,7 +228,7 @@ JOIN ChiTietGioHang ctgh ON gh.MaGioHang = ctgh.MaGioHang
 JOIN ChiTietSanPham cthp ON ctgh.MaChiTietSanPham = cthp.MaChiTietSanPham
 JOIN SanPham sp ON cthp.MaSanPham = sp.MaSanPham;
 
-SELECT * FROM ChiTietGioHang WHERE MaGioHang = 1;
+
 
 SELECT ct.MaChiTietGioHang,
        ct.MaGioHang,
@@ -243,5 +243,17 @@ JOIN SanPham sp ON cts.MaSanPham = sp.MaSanPham
 WHERE ct.MaGioHang IN (
     SELECT MaGioHang 
     FROM GioHang 
-    WHERE MaNguoiDung = 1
+    WHERE MaNguoiDung = 2
 );
+
+INSERT INTO BinhLuan (MaSanPham, MaNguoiDung, NoiDung, SoSao, NgayBinhLuan)
+VALUES (1, 1, 'Đánh giá thử', 5, NOW());
+SELECT MaChiTietSanPham, MaSanPham, KichThuoc, GiaXuat
+FROM ChiTietSanPham;
+SELECT * FROM ChiTietGioHang where MaChiTietSanPham =10; 
+
+
+SELECT * FROM GioHang;
+
+SELECT * FROM ChiTietGioHang;
+

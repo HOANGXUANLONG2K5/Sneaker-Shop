@@ -66,7 +66,7 @@
 
                     <div id="near-comment" class="reviews-list mt-5">
                         <h4 class="mb-4">Các đánh giá gần đây</h4>
-                        <div id="reviewContainer"></div>
+                        <div id="reviewContainer" data-product-id="" ></div>
                         <div class="text-center mt-3">
                             <button class="btn btn-outline-dark btn-sm" id="loadMoreBtn" style="display:none;">Xem thêm
                                 đánh giá</button>
@@ -103,14 +103,14 @@
                             
                         </div>
 
-                        <div class="mb-3">
+                        <div id= "size-button" class="mb-3">
                             <label class="form-label">Kích thước:</label><br>
-                            <button class="btn btn-outline-dark btn-sm">39</button>
+                            <!-- <button class="btn btn-outline-dark btn-sm">39</button>
                             <button class="btn btn-outline-dark btn-sm">40</button>
                             <button class="btn btn-outline-dark btn-sm">41</button>
                             <button class="btn btn-outline-dark btn-sm">42</button>
                             <button class="btn btn-outline-dark btn-sm">43</button>
-                            <button class="btn btn-outline-dark btn-sm">44</button>
+                            <button class="btn btn-outline-dark btn-sm">44</button> -->
                         </div>
 
                         <button id="addToCartBtn" class="btn btn-dark w-100 py-2 mt-2">Thêm vào giỏ hàng</button>
@@ -348,10 +348,13 @@
         </div>
     </footer>
     <script src="Choose_star.js"></script>
-    <script src="Product_detail_comment.js"></script>
+    <script src="Comment.js"></script>
     <script src="Product_cart.js"></script>
     <script src="Product_detail_show.js"></script>
+    <script src="Add_Comment.js"></script>
     <script src="../Product/Product_show.js"></script>
+    <script src="Size_Show.js"></script>
+    
 </body>
 
 </html>

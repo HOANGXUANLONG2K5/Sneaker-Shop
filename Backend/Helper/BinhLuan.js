@@ -2,13 +2,14 @@ const Comment = require('../Model/BinhLuan');
 
 const CommentHelper = {
     getComment: async () => {
-        const res = await fetch('http://localhost:3000/api/users');
+        const res = await fetch(`http://localhost:3000/api/comment/${productID}`);
+        if(!res.ok) throw new Error('Khong lay duoc binh luan');
         const data = await res.json();
         return data.map(Comment.fromJSON);
     },
 
     addComment: async (comment) => {
-        const res = await fetch('http://localhost:3000/api/users', {
+        const res = await fetch('http://localhost:3000/api/comment/add', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(comment)
@@ -17,7 +18,7 @@ const CommentHelper = {
     },
 
     updateComment: async (id, Comment) => {
-    const res = await fetch(`http://localhost:3000/api/users/${id}`, {
+    const res = await fetch(`http://localhost:3000/api/comment/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(Comment)
@@ -26,7 +27,7 @@ const CommentHelper = {
   },
 
   deleteComment: async (id) => {
-    const res = await fetch(`http://localhost:3000/api/users/${id}`, {
+    const res = await fetch(`http://localhost:3000/api/comment/${id}`, {
       method: 'DELETE'
     });
     return await res.json();

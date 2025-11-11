@@ -14,24 +14,23 @@ document.querySelector('form').addEventListener('submit', async (e) => {
     const data = await res.json();
 
     if (res.ok) {
+      //Lấy userId đúng từ data.user
+      localStorage.setItem("userId", data.user.MaNguoiDung);
+
       Swal.fire({
         icon: 'success',
         title: 'Đăng nhập thành công!',
         text: data.message
       }).then(() => {
+        // redirect sang trang Home
         window.location.href = "../Home/Home.html";
       });
     } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Lỗi đăng nhập!',
-        text: data.error
-      });
+      Swal.fire({ icon: 'error', title: 'Lỗi đăng nhập!', text: data.error });
     }
 
   } catch (error) {
     console.error('Lỗi:', error);
     alert('Không thể kết nối đến server.');
-    
   }
 });

@@ -3,7 +3,7 @@ const Cart = require('../Model/GioHang');
 const CartHelper = {
     // Lấy giỏ hàng của một user
     getProducts: async (userId) => {
-        const res = await fetch(`http://localhost:3000/api/cart/${userId}`);
+        const res = await fetch(`http://localhost:3000/api/cart/${userId}`)  ;
         if (!res.ok) throw new Error('Không lấy được giỏ hàng');
         const data = await res.json();
         return data.map(Cart.fromJSON);

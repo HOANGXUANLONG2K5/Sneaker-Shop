@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  const userId = 1; // TODO: lấy từ session/localStorage nếu có
-  const cartContainer = document.querySelector('.col-lg-8'); // container bên trái
-  const totalSpans = document.querySelectorAll('.col-lg-4 span'); // tổng tiền
+  const userId = Number(localStorage.getItem("userId"));
+  const cartContainer = document.querySelector('.col-lg-8');
+  const totalSpans = document.querySelectorAll('.col-lg-4 span');
 
   try {
     // Lấy giỏ hàng của user
@@ -43,9 +43,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Xử lý xóa sản phẩm
       div.querySelector('button').addEventListener('click', async () => {
         try {
-          const delRes = await fetch(`http://localhost:3000/api/cart/${item.MaChiTietSanPham}`, {
-            method: 'DELETE'
+          const delRes = await fetch(`http://localhost:3000/api/cart/delete`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ MaChiTietSanPham: item.MaChiTietSanPham, MaNguoiDung: userId })
           });
+
           if (!delRes.ok) throw new Error('Xóa thất bại');
           cartContainer.removeChild(div);
           total -= itemTotal;
