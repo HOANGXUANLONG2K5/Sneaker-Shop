@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  const userId = Number(localStorage.getItem("userId"));
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const userId = currentUser?.id;
   const cartContainer = document.querySelector('.col-lg-8');
   const totalSpans = document.querySelectorAll('.col-lg-4 span');
 

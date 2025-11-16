@@ -1,23 +1,35 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const userRoutes = require('./Route/Nguoidung');
-const productRoutes = require('./Route/SanPham');
-const productDetailRoutes = require('./Route/ChiTietSanPham');
-const cartRoutes = require('./Route/GioHang');
-const commentRoutes = require('./Route/BinhLuan');
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const path = require('path');
+
+// Import routes
+const userRoutes = require("./Route/TaiKhoan");
+const productRoutes = require("./Route/SanPham");
+const productDetailRoutes = require("./Route/ChiTietSanPham");
+const cartRoutes = require("./Route/GioHang");
+const commentRoutes = require("./Route/BinhLuan");
 
 const app = express();
 const port = 3000;
 
-app.use(cors());  
-
+// Middleware
+app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/api/users', userRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/productdetails', productDetailRoutes);
-app.use('/api/cart', cartRoutes);
-app.use('/api/comment', commentRoutes);
+// Cho phép truy cập các file trong folder 'uploads'
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.listen(port, () => console.log(`Server chạy tại http://localhost:${port}`));
+// Routes
+app.use("/api/users", userRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/productdetails", productDetailRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/comment", commentRoutes);
+
+
+// Start server
+app.listen(port, () => {
+  console.log(`Server đang chạy tại: http://localhost:${port}`);
+});

@@ -17,8 +17,8 @@
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/UNIQLO_logo_%28Japanese%29.svg/2058px-UNIQLO_logo_%28Japanese%29.svg.png"
                 alt="Logo" class="logo">
             <div class="nav_icons">
-                <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
-                <a href="#"><i class="fa-regular fa-heart"></i></a>
+                <a href="../Cart/Cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+                <a href="../Home/Home.html"><i class="fa-solid fa-house"></i></a>
             </div>
         </nav>
     </header>
@@ -30,10 +30,11 @@
                 <!-- Sidebar -->
                 <div class="col-md-3 mb-4">
                     <div class="list-group shadow-sm" id="profileMenu">
-                        <a href="#" class="list-group-item list-group-item-action active" data-target="profile">Hồ
+                        <a href="#" class="list-group-item list-group-item-action" data-target="profile">Hồ
                             sơ</a>
-                        <a href="#" class="list-group-item list-group-item-action" data-target="bank">Ngân hàng</a>
-                        <a href="#" class="list-group-item list-group-item-action" data-target="address">Địa chỉ</a>
+                        <a href="#" class="list-group-item list-group-item-action" data-target="history">Lịch sử mua
+                            hàng</a>
+
                         <a href="#" class="list-group-item list-group-item-action" data-target="password">Đổi mật
                             khẩu</a>
                     </div>
@@ -41,85 +42,101 @@
 
                 <!-- Main content -->
                 <div class="col-md-9">
+
                     <!-- Hồ sơ -->
                     <div class="card shadow-sm p-4 content-section" id="profile">
-                        <h5 class="mb-4 fw-bold text-uppercase">Thông tin cá nhân</h5>
-                        <form>
-                            <div class="mb-3">
-                                <label class="form-label">Họ và tên</label>
-                                <input type="text" class="form-control" placeholder="Nhập họ và tên đầy đủ">
+                        <h5 class="mb-4 fw-bold text-uppercase text-center">Thông tin cá nhân</h5>
+                        <form id="profileForm">
+                            <div class="row mb-4 align-items-center">
+                                <!-- Avatar -->
+                                <div class="col-md-4 text-center">
+                                    <div class="avatar-wrapper">
+                                        <img src="" alt="Avatar" class="avatar-img">
+                                        <label for="avatarInput" class="avatar-label">
+                                            <i class="fas fa-camera"></i>
+                                        </label>
+                                        <input type="file" id="avatarInput" name="Avatar" class="d-none">
+                                    </div>
+                                </div>
+
+                                <!-- Thông tin cá nhân -->
+                                <div class="col-md-8">
+                                    <div class="mb-3">
+                                        <label class="form-label">Họ</label>
+                                        <input type="text" class="form-control" name="Ho" value="">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Tên</label>
+                                        <input type="text" class="form-control" name="Ten" value="">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Giới tính</label>
+                                        <select class="form-control" name="GioiTinh">
+                                            <option value="Nam">Nam</option>
+                                            <option value="Nu">Nữ</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Ngày sinh</label>
+                                        <input type="date" class="form-control" name="NgaySinh" value="">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Số điện thoại</label>
+                                        <input type="text" class="form-control" name="SoDienThoai" value="">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Địa chỉ</label>
+                                        <textarea class="form-control" name="DiaChi" rows="3"
+                                            placeholder="Nhập địa chỉ đầy đủ"></textarea>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Số CCCD</label>
-                                <input type="text" class="form-control" placeholder="Số căn cước công dân">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Địa chỉ</label>
-                                <textarea class="form-control" rows="3" placeholder="Địa chỉ thường trú"></textarea>
-                            </div>
-                            <button class="btn btn-dark w-100">Xác nhận</button>
+
+                            <button class="btn btn-dark w-100">Cập nhật thông tin</button>
                         </form>
                     </div>
 
-                    <!-- Ngân hàng -->
-                    <div class="card shadow-sm p-4 content-section d-none" id="bank">
-                        <h5 class="mb-4 fw-bold text-uppercase">Ngân hàng</h5>
-                        <form>
-                            <div class="mb-3">
-                                <label class="form-label">Tên ngân hàng</label>
-                                <input type="text" class="form-control" placeholder="Nhập tên ngân hàng">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Số tài khoản</label>
-                                <input type="text" class="form-control" placeholder="Nhập số tài khoản">
-                            </div>
-                            <button class="btn btn-dark w-100">Lưu</button>
-                        </form>
-                    </div>
-
-                    <!-- Địa chỉ -->
-                    <div class="card shadow-sm p-4 content-section d-none" id="address">
-                        <h5 class="mb-4 fw-bold text-uppercase">Địa chỉ</h5>
-                        <form>
-                            <div class="mb-3">
-                                <label class="form-label">Thành phố</label>
-                                <input type="text" class="form-control" placeholder="Nhập thành phố">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Quận/Huyện</label>
-                                <input type="text" class="form-control" placeholder="Nhập quận huyện">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Số nhà, đường</label>
-                                <input type="text" class="form-control" placeholder="Nhập địa chỉ cụ thể">
-                            </div>
-                            <button class="btn btn-dark w-100">Lưu</button>
-                        </form>
+                    <!-- Lịch sử mua hàng -->
+                    <div class="card shadow-sm p-4 content-section" id="history">
+                        <h5 class="mb-4 fw-bold text-uppercase text-center">Lịch sử mua hàng</h5>
+                        <div id="orderHistory">
+                            <!-- JS sẽ load đơn hàng của user vào đây -->
+                            <p class="text-center text-muted">Bạn chưa có đơn hàng nào.</p>
+                        </div>
                     </div>
 
                     <!-- Đổi mật khẩu -->
-                    <div class="card shadow-sm p-4 content-section d-none" id="password">
+                    <div class="card shadow-sm p-4 content-section" id="password">
                         <h5 class="mb-4 fw-bold text-uppercase">Đổi mật khẩu</h5>
-                        <form>
+                        <form id="changePasswordForm">
                             <div class="mb-3">
                                 <label class="form-label">Mật khẩu hiện tại</label>
-                                <input type="password" class="form-control" placeholder="Nhập mật khẩu hiện tại">
+                                <input type="password" name="currentPassword" class="form-control"
+                                    placeholder="Nhập mật khẩu hiện tại" required>
                             </div>
+
                             <div class="mb-3">
                                 <label class="form-label">Mật khẩu mới</label>
-                                <input type="password" class="form-control" placeholder="Nhập mật khẩu mới">
+                                <input type="password" name="newPassword" class="form-control"
+                                    placeholder="Nhập mật khẩu mới" required>
                             </div>
+
                             <div class="mb-3">
                                 <label class="form-label">Xác nhận mật khẩu mới</label>
-                                <input type="password" class="form-control" placeholder="Nhập lại mật khẩu mới">
+                                <input type="password" name="confirmPassword" class="form-control"
+                                    placeholder="Nhập lại mật khẩu mới" required>
                             </div>
-                            <button class="btn btn-dark w-100">Đổi mật khẩu</button>
+
+                            <button type="submit" class="btn btn-dark w-100">Đổi mật khẩu</button>
                         </form>
                     </div>
+
                 </div>
             </div>
         </div>
     </section>
+
+
 
     <footer class="bg-dark text-white pt-5 pb-4">
         <div class="container">
@@ -285,7 +302,10 @@
             </div>
         </div>
     </footer>
-    <script src="User_profile.js"></script>
+    <script src="User_profile_selected.js"></script>
+    <script src="User_profile_show.js"></script>
+    <script src="User_profile_submit.js"></script>
+    <script src="User_change_password.js"></script>
 </body>
 
 </html>

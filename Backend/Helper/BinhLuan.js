@@ -1,37 +1,61 @@
+const db = require('../DB/Connect');
 const Comment = require('../Model/BinhLuan');
 
 const CommentHelper = {
-    getComment: async () => {
-        const res = await fetch(`http://localhost:3000/api/comment/${productID}`);
-        if(!res.ok) throw new Error('Khong lay duoc binh luan');
-        const data = await res.json();
-        return data.map(Comment.fromJSON);
-    },
-
-    addComment: async (comment) => {
-        const res = await fetch('http://localhost:3000/api/comment/add', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(comment)
-        });
-        return await res.json();
-    },
-
-    updateComment: async (id, Comment) => {
-    const res = await fetch(`http://localhost:3000/api/comment/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(Comment)
+  getComment: (productID) => {
+    return new Promise((resolve, reject) => {
+      const sql = `
+            SELECT bl.MaBinhLuan, bl.SoSao, bl.NoiDung, bl.NgayBinhLuan,
+                   bl.MaTaiKhoan, bl.MaSanPham,
+                   tk.Ho, tk.Ten, tk.Avatar
+            FROM BinhLuan bl
+            JOIN TaiKhoan tk ON bl.MaTaiKhoan = tk.MaTaiKhoan
+            WHERE bl.MaSanPham = ?
+            ORDER BY bl.NgayBinhLuan DESC
+        `;
+      db.query(sql, [productID], (err, results) => {
+        if (err) return reject(err);
+        resolve(results.map(Comment.fromJSON));
+      });
     });
-    return await res.json();
   },
 
-  deleteComment: async (id) => {
-    const res = await fetch(`http://localhost:3000/api/comment/${id}`, {
-      method: 'DELETE'
+
+  addComment: (data) => {
+    return new Promise((resolve, reject) => {
+      const { MaTaiKhoan, MaSanPham, SoSao, NoiDung } = data;
+      // Lưu ý đổi MaNguoiDung → MaTaiKhoan
+      const sql = `
+                INSERT INTO BinhLuan (MaTaiKhoan, MaSanPham, SoSao, NoiDung, NgayBinhLuan)
+                VALUES (?, ?, ?, ?, NOW())
+            `;
+      db.query(sql, [MaTaiKhoan, MaSanPham, SoSao, NoiDung], (err, result) => {
+        if (err) return reject(err);
+        resolve(new Comment(result.insertId, MaTaiKhoan, MaSanPham, SoSao, NoiDung, new Date()));
+      });
     });
-    return await res.json();
+  },
+
+  updateComment: (id, data) => {
+    return new Promise((resolve, reject) => {
+      const { SoSao, NoiDung } = data;
+      const sql = `UPDATE BinhLuan SET SoSao = ?, NoiDung = ? WHERE MaBinhLuan = ?`;
+      db.query(sql, [SoSao, NoiDung, id], (err) => {
+        if (err) return reject(err);
+        resolve(new Comment(id, null, null, SoSao, NoiDung, new Date()));
+      });
+    });
+  },
+
+  deleteComment: (id) => {
+    return new Promise((resolve, reject) => {
+      const sql = `DELETE FROM BinhLuan WHERE MaBinhLuan = ?`;
+      db.query(sql, [id], (err) => {
+        if (err) return reject(err);
+        resolve();
+      });
+    });
   }
-};  
+};
 
 module.exports = CommentHelper;

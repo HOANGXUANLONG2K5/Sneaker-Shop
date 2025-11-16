@@ -1,6 +1,3 @@
-
-
-
 document.querySelector(".product-review .btn.btn-dark").addEventListener("click", async () => {
     const content = document.getElementById("feedback").value;
     const stars = parseInt(document.getElementById("rating").value) || 0;
@@ -11,13 +8,16 @@ document.querySelector(".product-review .btn.btn-dark").addEventListener("click"
     }
 
     // Lấy userId từ localStorage
-    const userId = parseInt(localStorage.getItem("userId"));
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const userId = currentUser?.id;
+
     if (!userId) {
         alert("Bạn chưa đăng nhập!");
+        window.location.href = "../Login/Login.html";
         return;
     }
 
-    // Lấy productId từ dataset mà bạn đã gán lúc DOMContentLoaded
+    // Lấy productId từ dataset đã gán lúc DOMContentLoaded
     const productContainer = document.getElementById("reviewContainer");
     const productId = parseInt(productContainer.dataset.productId);
     if (!productId) {
@@ -30,7 +30,7 @@ document.querySelector(".product-review .btn.btn-dark").addEventListener("click"
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                MaNguoiDung: userId,
+                MaTaiKhoan: userId,
                 MaSanPham: productId,
                 NoiDung: content,
                 SoSao: stars
@@ -40,7 +40,7 @@ document.querySelector(".product-review .btn.btn-dark").addEventListener("click"
         const data = await res.json();
         if (res.ok) {
             alert("Gửi đánh giá thành công!");
-            // load lại comment sau khi thêm
+            // Load lại comment sau khi thêm
             loadComments(productId);
         } else {
             alert("Gửi đánh giá thất bại: " + data.message);

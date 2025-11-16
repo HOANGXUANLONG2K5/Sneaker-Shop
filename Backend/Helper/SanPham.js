@@ -1,41 +1,69 @@
+const db = require('../DB/Connect');
 const Product = require('../Model/SanPham');
 
 const ProductHelper = {
-  getProducts: async () => {
-    const res = await fetch('http://localhost:3000/api/products');
-    const data = await res.json();
-    return data.map(Product.fromJSON);
-  },
+  getAllWithDetails: () => {
+    return new Promise((resolve, reject) => {
+      const sql = `
+        SELECT sp.*, ct.MaChiTietSanPham, ct.KichThuoc, ct.GiaNhap, ct.GiaXuat, ct.SoLuong
+        FROM SanPham sp
+        LEFT JOIN ChiTietSanPham ct ON sp.MaSanPham = ct.MaSanPham
+      `;
+      db.query(sql, (err, results) => {
+        if (err) return reject(err);
 
-  getProductsByBrand: async (brand) => {
-    const res = await fetch(`http://localhost:3000/api/products/brand?hang=${brand}`);
-    const data = await res.json();
-    return data.map(Product.fromJSON);
-  },
+        const productMap = new Map();
 
-  addProduct: async (product) => {
-    const res = await fetch('http://localhost:3000/api/products', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(product)
+        results.forEach(row => {
+          if (productMap.has(row.MaSanPham)) {
+            productMap.get(row.MaSanPham).chiTiet.push({
+              id: row.MaChiTietSanPham,
+              kichThuoc: row.KichThuoc,
+              giaNhap: row.GiaNhap,
+              giaXuat: row.GiaXuat,
+              soLuong: row.SoLuong
+            });
+          } else {
+            productMap.set(row.MaSanPham, Product.fromJSONWithDetails(row));
+          }
+        });
+
+        resolve(Array.from(productMap.values()));
+      });
     });
-    return await res.json();
   },
 
-  updateProduct: async (id, product) => {
-    const res = await fetch(`http://localhost:3000/api/products/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(product)
-    });
-    return await res.json();
-  },
+  getBySearch: (keyword) => { 
+    return new Promise((resolve, reject) => {
+      const sql = `
+        SELECT sp.*, ct.MaChiTietSanPham, ct.KichThuoc, ct.GiaNhap, ct.GiaXuat, ct.SoLuong
+        FROM SanPham sp
+        LEFT JOIN ChiTietSanPham ct ON sp.MaSanPham = ct.MaSanPham
+        WHERE sp.TenSanPham LIKE ? OR sp.MoTa LIKE ?;
+      `;
 
-  deleteProduct: async (id) => {
-    const res = await fetch(`http://localhost:3000/api/products/${id}`, {
-      method: 'DELETE'
+      db.query(sql, [`%${keyword}%`, `%${keyword}%`], (err, results) => {
+        if (err) return reject(err);
+
+        const productMap = new Map();
+
+        results.forEach(row => {
+          if (productMap.has(row.MaSanPham)) {
+            productMap.get(row.MaSanPham).chiTiet.push({
+              id: row.MaChiTietSanPham,
+              kichThuoc: row.KichThuoc,
+              giaNhap: row.GiaNhap,
+              giaXuat: row.GiaXuat,
+              soLuong: row.SoLuong
+            });
+          } else {
+            productMap.set(row.MaSanPham, Product.fromJSONWithDetails(row));
+          }
+        });
+
+        resolve(Array.from(productMap.values()));
+      });
     });
-    return await res.json();
   }
 };
 

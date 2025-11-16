@@ -1,28 +1,18 @@
 CREATE DATABASE SneakerStore;
-Use SneakerStore;
+USE SneakerStore;
 
-CREATE TABLE NguoiDung(
-	MaNguoiDung INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE TaiKhoan (
+    MaTaiKhoan INT AUTO_INCREMENT PRIMARY KEY,
     MatKhau VARCHAR(255) NOT NULL,
     Ho NVARCHAR(50),
     Ten NVARCHAR(50),
     GioiTinh VARCHAR(10),
     NgaySinh DATE,
     SoDienThoai VARCHAR(20),
-    Email VARCHAR(100),
+    Email VARCHAR(100) UNIQUE NOT NULL,
     DiaChi NVARCHAR(255),
-    Avatar VARCHAR(255)
-);
-
--- Bảng chủ (Admin)
-CREATE TABLE Chu (
-    MaAdmin INT AUTO_INCREMENT PRIMARY KEY,
-    MatKhau VARCHAR(255) NOT NULL,
-    Ho NVARCHAR(50),
-    Ten NVARCHAR(50),
-    SoDienThoai VARCHAR(20),
-    Email VARCHAR(100),
-    DiaChi NVARCHAR(255)
+    Avatar VARCHAR(255),
+    VaiTro ENUM('user', 'admin') DEFAULT 'user'
 );
 
 -- Bảng sản phẩm
@@ -49,8 +39,8 @@ CREATE TABLE ChiTietSanPham (
 -- Bảng giỏ hàng
 CREATE TABLE GioHang (
     MaGioHang INT AUTO_INCREMENT PRIMARY KEY,
-    MaNguoiDung INT NOT NULL,
-    FOREIGN KEY (MaNguoiDung) REFERENCES NguoiDung(MaNguoiDung)
+    MaTaiKhoan INT NOT NULL,
+    FOREIGN KEY (MaTaiKhoan) REFERENCES TaiKhoan(MaTaiKhoan)
 );
 
 -- Bảng chi tiết giỏ hàng
@@ -66,11 +56,13 @@ CREATE TABLE ChiTietGioHang (
 -- Bảng đơn hàng
 CREATE TABLE DonHang (
     MaDonHang INT AUTO_INCREMENT PRIMARY KEY,
+    MaTaiKhoan INT NOT NULL,
     NgayDat DATETIME,
     TrangThaiDonHang VARCHAR(50),
     DiaChiGiaoToi NVARCHAR(255),
     SoDienThoai VARCHAR(20),
-    TongTien DECIMAL(12,2)
+    TongTien DECIMAL(12,2),
+    FOREIGN KEY (MaTaiKhoan) REFERENCES TaiKhoan(MaTaiKhoan)
 );
 
 -- Bảng chi tiết đơn hàng
@@ -98,162 +90,104 @@ CREATE TABLE ThanhToan (
 -- Bảng bình luận
 CREATE TABLE BinhLuan (
     MaBinhLuan INT AUTO_INCREMENT PRIMARY KEY,
-    MaNguoiDung INT NOT NULL,
+    MaTaiKhoan INT NOT NULL,
     MaSanPham INT NOT NULL,
     SoSao INT,
     NoiDung NVARCHAR(500),
     NgayBinhLuan DATETIME,
-    FOREIGN KEY (MaNguoiDung) REFERENCES NguoiDung(MaNguoiDung),
+    FOREIGN KEY (MaTaiKhoan) REFERENCES TaiKhoan(MaTaiKhoan),
     FOREIGN KEY (MaSanPham) REFERENCES SanPham(MaSanPham)
 );
 
--- Bảng chat
+-- Bảng chat (1 đoạn chat giữa user và admin)
 CREATE TABLE Chat (
     MaDoanChat INT AUTO_INCREMENT PRIMARY KEY,
-    MaAdmin INT NOT NULL,
-    MaNguoiDung INT NOT NULL,
-    FOREIGN KEY (MaAdmin) REFERENCES Chu(MaAdmin),
-    FOREIGN KEY (MaNguoiDung) REFERENCES NguoiDung(MaNguoiDung)
+    NguoiDung INT NOT NULL,
+    Admin INT NOT NULL,
+    FOREIGN KEY (NguoiDung) REFERENCES TaiKhoan(MaTaiKhoan),
+    FOREIGN KEY (Admin) REFERENCES TaiKhoan(MaTaiKhoan)
 );
 
 -- Bảng chi tiết tin nhắn
 CREATE TABLE ChiTietTinNhan (
     MaChiTietTinNhan INT AUTO_INCREMENT PRIMARY KEY,
     MaDoanChat INT NOT NULL,
-    MaAdmin INT NOT NULL,
-    MaNguoiDung INT NOT NULL,
+    NguoiGui INT NOT NULL,
     NoiDung NVARCHAR(1000),
     ThoiGian DATETIME,
     TrangThai VARCHAR(50),
     FOREIGN KEY (MaDoanChat) REFERENCES Chat(MaDoanChat),
-    FOREIGN KEY (MaAdmin) REFERENCES Chu(MaAdmin),
-    FOREIGN KEY (MaNguoiDung) REFERENCES NguoiDung(MaNguoiDung)
+    FOREIGN KEY (NguoiGui) REFERENCES TaiKhoan(MaTaiKhoan)
 );
 
--- Bảng NguoiDung (khách hàng)
-INSERT INTO NguoiDung (MatKhau, Ho, Ten, GioiTinh, NgaySinh, SoDienThoai, Email, DiaChi, Avatar)
-VALUES 
-('123456', 'Nguyen', 'Duc', 'Nam', '2005-11-21', '0123456789', 'duc@example.com', 'Ha Noi', 'default.jpg'),
-('654321', 'Tran', 'Linh', 'Nu', '2004-07-15', '0987654321', 'linh@example.com', 'Da Nang', 'linh.jpg');
+-- Dữ liệu mẫu
+INSERT INTO TaiKhoan (MatKhau, Ho, Ten, GioiTinh, NgaySinh, SoDienThoai, Email, DiaChi, Avatar, VaiTro)
+VALUES
+('123456', 'Nguyen', 'Duc', 'Nam', '2005-11-21', '0123456789', 'duc@example.com', 'Ha Noi', 'default.jpg', 'user'),
+('654321', 'Tran', 'Linh', 'Nu', '2004-07-15', '0987654321', 'linh@example.com', 'Da Nang', 'linh.jpg', 'user'),
+('admin123', 'Le', 'Minh', NULL, NULL, '0912345678', 'admin@sneakerstore.com', 'TP. HCM', NULL, 'admin');
 
--- Bảng Chu (admin)
-INSERT INTO Chu (MatKhau, Ho, Ten, SoDienThoai, Email, DiaChi)
-VALUES 
-('admin123', 'Le', 'Minh', '0912345678', 'admin@sneakerstore.com', 'TP. HCM');
-
--- Bảng SanPham
 INSERT INTO SanPham (TenSanPham, ThuongHieu, Anh, Model3D, MoTa)
 VALUES 
 ('Air Jordan 1 Retro', 'Nike', 'jordan1.jpg', 'jordan1.glb', 'Giày huyền thoại của Nike'),
 ('Yeezy Boost 350 V2', 'Adidas', 'yeezy350.jpg', 'yeezy350.glb', 'Thiết kế thời trang và êm ái');
 
--- Bảng ChiTietSanPham
 INSERT INTO ChiTietSanPham (MaSanPham, KichThuoc, SoLuong, GiaNhap, GiaXuat)
 VALUES 
 (1, '42', 10, 2500000, 3500000),
 (2, '41', 15, 2800000, 4000000);
 
--- Bảng GioHang
-INSERT INTO GioHang (MaNguoiDung)
-VALUES (1), (2);
+INSERT INTO GioHang (MaTaiKhoan) VALUES (1), (2);
 
--- Bảng ChiTietGioHang
 INSERT INTO ChiTietGioHang (MaGioHang, MaChiTietSanPham, SoLuong)
 VALUES 
 (1, 1, 2),
 (2, 2, 1);
 
--- Bảng DonHang
-INSERT INTO DonHang (NgayDat, TrangThaiDonHang, DiaChiGiaoToi, SoDienThoai, TongTien)
+INSERT INTO DonHang (MaTaiKhoan, NgayDat, TrangThaiDonHang, DiaChiGiaoToi, SoDienThoai, TongTien)
 VALUES 
-(NOW(), 'Đang xử lý', 'Hà Nội', '0123456789', 7000000),
-(NOW(), 'Hoàn thành', 'Đà Nẵng', '0987654321', 4000000);
+(1, NOW(), 'Đang xử lý', 'Hà Nội', '0123456789', 7000000),
+(2, NOW(), 'Hoàn thành', 'Đà Nẵng', '0987654321', 4000000);
 
--- Bảng ChiTietDonHang
 INSERT INTO ChiTietDonHang (MaDonHang, MaChiTietSanPham, SoLuong, Gia)
 VALUES 
 (1, 1, 2, 3500000),
 (2, 2, 1, 4000000);
 
--- Bảng ThanhToan
 INSERT INTO ThanhToan (MaDonHang, PhuongThucThanhToan, SoTien, TrangThai, Ngay)
 VALUES 
 (1, 'Momo', 7000000, 'Thành công', NOW()),
 (2, 'Tiền mặt', 4000000, 'Thành công', NOW());
 
--- Bảng BinhLuan
-INSERT INTO BinhLuan (MaNguoiDung, MaSanPham, SoSao, NoiDung, NgayBinhLuan)
+INSERT INTO BinhLuan (MaTaiKhoan, MaSanPham, SoSao, NoiDung, NgayBinhLuan)
 VALUES 
 (1, 1, 5, 'Giày đẹp và chất lượng!', NOW()),
 (2, 2, 4, 'Mềm, thoải mái nhưng hơi đắt.', NOW());
 
--- Bảng Chat
-INSERT INTO Chat (MaAdmin, MaNguoiDung)
+INSERT INTO Chat (NguoiDung, Admin)
 VALUES 
-(1, 1),
-(1, 2);
+(1, 3),
+(2, 3);
 
--- Bảng ChiTietTinNhan
-INSERT INTO ChiTietTinNhan (MaDoanChat, MaAdmin, MaNguoiDung, NoiDung, ThoiGian, TrangThai)
+INSERT INTO ChiTietTinNhan (MaDoanChat, NguoiGui, NoiDung, ThoiGian, TrangThai)
 VALUES 
-(1, 1, 1, 'Xin chào! Tôi cần hỗ trợ đơn hàng.', NOW(), 'Đã gửi'),
-(1, 1, 1, 'Admin: Chúng tôi sẽ kiểm tra ngay.', NOW(), 'Đã xem');
+(1, 1, 'Xin chào! Tôi cần hỗ trợ đơn hàng.', NOW(), 'Đã gửi'),
+(1, 3, 'Admin: Chúng tôi sẽ kiểm tra ngay.', NOW(), 'Đã xem');
 
-SELECT * FROM SneakerStore.NguoiDung LIMIT 1000;
+SELECT * FROM BinhLuan WHERE MaSanPham = 2;
 
-UPDATE SanPham
-SET Anh = 'https://authentic-shoes.com/wp-content/uploads/2023/04/816352_01.jpg_cc33f27d80df4f98aa08ce4d6c5fcc90.png'
-WHERE MaSanPham = 2;
-
-
-SELECT sp.*, ct.GiaXuat, ct.GiaNhap, ct.SoLuong
-FROM SanPham sp
-LEFT JOIN ChiTietSanPham ct ON sp.MaSanPham = ct.MaSanPham
-WHERE sp.MaSanPham = 2;
-
-SELECT sp.*, ct.KichThuoc, ct.GiaXuat, ct.GiaNhap, ct.SoLuong
-    FROM SanPham sp
-    LEFT JOIN ChiTietSanPham ct ON sp.MaSanPham = ct.MaSanPham
-    WHERE sp.MaSanPham = 2
-    
 SELECT 
-    gh.MaGioHang,
-    gh.MaNguoiDung,
-    cthp.MaChiTietSanPham,
+    ct.MaGioHang,
+    ct.MaChiTietSanPham,
+    ct.SoLuong,
+    gh.MaTaiKhoan AS MaNguoiDung,
     sp.TenSanPham,
-    cthp.KichThuoc,
-    ctgh.SoLuong
-FROM GioHang gh
-JOIN ChiTietGioHang ctgh ON gh.MaGioHang = ctgh.MaGioHang
-JOIN ChiTietSanPham cthp ON ctgh.MaChiTietSanPham = cthp.MaChiTietSanPham
-JOIN SanPham sp ON cthp.MaSanPham = sp.MaSanPham;
-
-
-
-SELECT ct.MaChiTietGioHang,
-       ct.MaGioHang,
-       ct.MaChiTietSanPham,
-       ct.SoLuong,
-       sp.TenSanPham,
-       cts.KichThuoc,
-       cts.GiaXuat
+    ctp.GiaXuat,
+    ctp.KichThuoc
 FROM ChiTietGioHang ct
-JOIN ChiTietSanPham cts ON ct.MaChiTietSanPham = cts.MaChiTietSanPham
-JOIN SanPham sp ON cts.MaSanPham = sp.MaSanPham
-WHERE ct.MaGioHang IN (
-    SELECT MaGioHang 
-    FROM GioHang 
-    WHERE MaNguoiDung = 2
-);
+JOIN GioHang gh ON ct.MaGioHang = gh.MaGioHang
+JOIN ChiTietSanPham ctp ON ct.MaChiTietSanPham = ctp.MaChiTietSanPham
+JOIN SanPham sp ON ctp.MaSanPham = sp.MaSanPham
+WHERE gh.MaTaiKhoan = 1;
 
-INSERT INTO BinhLuan (MaSanPham, MaNguoiDung, NoiDung, SoSao, NgayBinhLuan)
-VALUES (1, 1, 'Đánh giá thử', 5, NOW());
-SELECT MaChiTietSanPham, MaSanPham, KichThuoc, GiaXuat
-FROM ChiTietSanPham;
-SELECT * FROM ChiTietGioHang where MaChiTietSanPham =10; 
-
-
-SELECT * FROM GioHang;
-
-SELECT * FROM ChiTietGioHang;
-
+SElect *from TaiKhoan

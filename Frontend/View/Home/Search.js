@@ -1,36 +1,22 @@
-(function(){
-  const searchBtn = document.getElementById('searchBtn');
-  const overlay = document.getElementById('searchOverlay');
-  const closeBtn = document.getElementById('closeSearch');
-  const input = document.querySelector('.search-input-area input');
-  
+const searchInput = document.querySelector('.search-input-area input');
+let typingTimer;
+const debounceTime = 150;
 
-  searchBtn.addEventListener('click', function(e){
-    e.preventDefault();
-    overlay.classList.add('show');
-    overlay.setAttribute('aria-hidden','false');
-    
-    setTimeout(()=> { if (input) input.focus(); }, 180);
-  });
+searchInput.addEventListener('keyup', () => {
+  clearTimeout(typingTimer);
 
+  typingTimer = setTimeout(() => {
+    const keyword = searchInput.value.trim();
 
-  function closeOverlay(){
-    overlay.classList.remove('show');
-    overlay.setAttribute('aria-hidden','true');
-    if (input) input.value = '';
-  }
+    if (keyword === "") {
+      document.querySelector('.suggested-products .row').innerHTML = "";
+      return;
+    }
 
-  if (closeBtn) closeBtn.addEventListener('click', closeOverlay);
+    fetch(`http://localhost:3000/api/products/search?q=${keyword}`)
+      .then(res => res.json())
+      .then(data => renderProducts(data))
+      .catch(err => console.error(err));
 
-
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape') closeOverlay();
-  });
-
-  overlay.addEventListener('click', function(e){
-    const content = overlay.querySelector('.search-container');
-    if (!content.contains(e.target)) closeOverlay();
-  });
-})();
-
-
+  }, debounceTime);
+});

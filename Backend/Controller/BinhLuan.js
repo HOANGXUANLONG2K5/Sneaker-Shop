@@ -1,65 +1,43 @@
-const db = require("../DB/Connect");
+const CommentHelper = require('../Helper/BinhLuan');
 
-exports.getComment = (req, res) => {
+// Lấy comment theo sản phẩm
+exports.getComment = async (req, res) => {
     const { maSanPham } = req.params;
-
-    const sql = `
-        SELECT bl.MaBinhLuan, bl.SoSao, bl.NoiDung, bl.NgayBinhLuan,
-               nd.Ho, nd.Ten, nd.Avatar
-        FROM BinhLuan bl
-        JOIN NguoiDung nd ON bl.MaNguoiDung = nd.MaNguoiDung
-        WHERE bl.MaSanPham = ?
-        ORDER BY bl.NgayBinhLuan DESC
-    `;
-
-    db.query(sql, [maSanPham], (err, result) => {
-        if (err) return res.status(500).json({ message: "Lỗi SQL", error: err });
-        res.json(result);
-    });
+    try {
+        const comments = await CommentHelper.getComment(maSanPham);
+        res.json(comments.map(c => c.toJSON())); // trả về JSON
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Lỗi khi lấy comment", error: err });
+    }
 };
 
-exports.addComment = (req, res) => {
-    const { MaNguoiDung, MaSanPham, SoSao, NoiDung } = req.body;
-
-    const sql = `
-        INSERT INTO BinhLuan (MaNguoiDung, MaSanPham, SoSao, NoiDung, NgayBinhLuan)
-        VALUES (?, ?, ?, ?, NOW())
-    `;
-
-    db.query(sql, [MaNguoiDung, MaSanPham, SoSao, NoiDung], (err, result) => {
-        if (err) {
-            console.error("Lỗi SQL chi tiết:", err);
-            return res.status(500).json({ message: "Lỗi SQL", error: err });
-        }
-        res.json({ message: "Thêm bình luận thành công", id: result.insertId });
-    });
+exports.addComment = async (req, res) => {
+    try {
+        const newComment = await CommentHelper.addComment(req.body);
+        res.json(newComment.toJSON());
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Lỗi khi thêm comment", error: err });
+    }
 };
 
-exports.updateComment = (req, res) => {
-    const { id } = req.params;
-    const { SoSao, NoiDung } = req.body;
-
-    const sql = `
-        UPDATE BinhLuan
-        SET SoSao = ?, NoiDung = ?
-        WHERE MaBinhLuan = ?
-    `;
-
-    db.query(sql, [SoSao, NoiDung, id], (err, result) => {
-        if (err) return res.status(500).json({ message: "Lỗi SQL", error: err });
-        res.json({ message: "Cập nhật bình luận thành công" });
-    });
+exports.updateComment = async (req, res) => {
+    try {
+        const updatedComment = await CommentHelper.updateComment(req.params.id, req.body);
+        res.json(updatedComment.toJSON());
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Lỗi khi cập nhật comment", error: err });
+    }
 };
 
-exports.deleteComment = (req, res) => {
-    const { id } = req.params;
-
-    const sql = `
-        DELETE FROM BinhLuan WHERE MaBinhLuan = ?
-    `;
-
-    db.query(sql, [id], (err, result) => {
-        if (err) return res.status(500).json({ message: "Lỗi SQL", error: err });
+exports.deleteComment = async (req, res) => {
+    try {
+        await CommentHelper.deleteComment(req.params.id);
         res.json({ message: "Xóa bình luận thành công" });
-    });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Lỗi khi xóa comment", error: err });
+    }
 };

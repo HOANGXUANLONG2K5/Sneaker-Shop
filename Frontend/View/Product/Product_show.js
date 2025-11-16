@@ -6,19 +6,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     const products = await response.json();
 
     products.forEach(product => {
-      const price = parseFloat(product.GiaXuat);
+      const giaThapNhat = Math.min(...product.chiTiet.map(c => c.giaXuat));
       const productHTML = `
         <div class="col-6 col-md-3">
-          <div class="card h-100">
-            <a href="../Product_detail/Product_detail.html?id=${product.MaSanPham}">
-              <img src="${product.Anh}" class="card-img-top" alt="${product.TenSanPham}">
+        <div class="card h-100">
+            <a href="../Product_detail/Product_detail.html?id=${product.id}">
+              <img src="${product.anh}" class="card-img-top" alt="${product.tenSanPham}">
             </a>
-            <div class="card-body text-center">
-              <h5 class="card-title">${product.TenSanPham}</h5>
-              <p class="card-text">${price.toLocaleString('vi-VN')} VND</p>
-            </div>
-          </div>
-        </div>`;
+        <div class="card-body text-center">
+        <h5 class="card-title">${product.tenSanPham}</h5>
+        <p class="card-text">${giaThapNhat.toLocaleString('vi-VN')} VND</p>
+        </div>
+        </div>
+      </div>
+      `;
       productList.innerHTML += productHTML;
     });
   } catch (error) {
@@ -26,3 +27,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     productList.innerHTML = "<p class='text-center text-danger'>Không thể tải sản phẩm</p>";
   }
 });
+
+

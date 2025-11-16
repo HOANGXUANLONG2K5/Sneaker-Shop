@@ -63,3 +63,39 @@ header {
 .table th {
   background: #f2f2f2;
 }
+
+.avatar-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.avatar-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%; 
+    border: 1px solid #dee2e6; 
+}
+
+.avatar-label {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #000;
+    color: #fff;
+    border-radius: 50%;
+    padding: 0.5rem;
+    cursor: pointer;
+    transform: translate(25%, 25%);
+}
+
+.avatar-label i {
+    font-size: 1rem;
+}
+
+
+.avatar-wrapper {
+    position: relative;
+    display: inline-block;
+    transform: translateY(-110%);
+}

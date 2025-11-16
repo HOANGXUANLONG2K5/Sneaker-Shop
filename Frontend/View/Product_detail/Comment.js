@@ -16,19 +16,19 @@ async function loadComments(productId) {
             </p>`;
         } else {
             comments.forEach(comment => {
-                const formattedDate = new Date(comment.NgayBinhLuan).toLocaleDateString("vi-VN");
+                const formattedDate = new Date(comment.ngayBinhLuan).toLocaleDateString("vi-VN");
                 const commentHTML = `
                     <div class="border-bottom pb-3 mb-3">
                         <div class="d-flex justify-content-between">
-                            <div>
-                                <strong>${comment.Ho} ${comment.Ten}</strong>
-                                <span class="text-muted small">• ${formattedDate}</span>
-                            </div>
-                            <div class="text-warning">
-                                ${"★".repeat(comment.SoSao)}${"☆".repeat(5 - comment.SoSao)}
-                            </div>
-                        </div>
-                        <p class="mt-2 mb-0">${comment.NoiDung}</p>
+                    <div>
+                        <strong>${comment.ho || ""} ${comment.ten || ""}</strong>
+                        <span class="text-muted small">• ${formattedDate}</span>
+                    </div>
+                    <div class="text-warning">
+                        ${"★".repeat(comment.soSao || 0)}${"☆".repeat(5 - (comment.soSao || 0))}
+                     </div>
+                    </div>
+                            <p class="mt-2 mb-0">${comment.noiDung || ""}</p>
                     </div>
                 `;
                 commentContainer.insertAdjacentHTML("beforeend", commentHTML);
