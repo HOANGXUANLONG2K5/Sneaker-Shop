@@ -191,3 +191,44 @@ JOIN SanPham sp ON ctp.MaSanPham = sp.MaSanPham
 WHERE gh.MaTaiKhoan = 1;
 
 SElect *from TaiKhoan
+
+-- Thêm SanPham cho Nike
+INSERT INTO SanPham (TenSanPham, ThuongHieu, Anh, Model3D, MoTa) VALUES
+('Nike Air Force 1', 'Nike', 'https://cdn.shopify.com/s/files/1/0268/2003/2327/products/AF1-White-1_1024x1024.jpg', 'https://sketchfab.com/3d-models/nike-air-force-1-low-summit-white-sneaker-591feae57ee04d69b35720490a8365e2.glb', 'Giày Nike Air Force 1 cổ thấp, thiết kế kinh điển.'),
+('Nike Dunk Low', 'Nike', 'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/3f56438c-1f90-4de9-90bb-3e4a40204f50/dunk-low-retro-giay-nam-pXgM22.png', 'https://sketchfab.com/3d-models/nike-dunk-low-3d-model-example.glb', 'Nike Dunk Low phong cách street / skate.'),
+('Nike Air Max 1', 'Nike', 'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/6df96718-94b9-48f2-b9f9-26325a01bc07/air-max-1-giay-nam-ZA55lY.png', 'https://sketchfab.com/3d-models/nike-air-max-1-3d-model-example.glb', 'Nike Air Max 1 với đệm khí nổi tiếng.'),
+('Nike Air Max 90', 'Nike', 'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/0f1e7c55-6a8c-454a-9e97-924f7fd2a496/air-max-90-giay-nam-2rd1X6.png', 'https://sketchfab.com/3d-models/nike-air-max-90-3d-model-example.glb', 'Nike Air Max 90 – thiết kế hoài cổ & thể thao.'),
+('Nike Blazer Mid', 'Nike', 'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/91d47b2a-306e-4d5f-9cca-e8aeba4490c2/blazer-mid-77-giay-nam-qbS8bR.png', 'https://sketchfab.com/3d-models/nike-blazer-mid-3d-model-example.glb', 'Nike Blazer Mid cổ cao, phong cách vintage.'),
+('Nike Cortez', 'Nike', 'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/2f755b68-b566-4e6a-a69f-f7baa2295d80/cortez-basic-sl-giay-nam-p2f7wW.png', 'https://sketchfab.com/3d-models/nike-cortez-3d-model-example.glb', 'Nike Cortez – thiết kế retro cổ điển.'),
+('Nike Pegasus 40', 'Nike', 'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/abcd1234-5678-pegasus-40.png', 'https://sketchfab.com/3d-models/nike-pegasus-40-3d-model-example.glb', 'Nike Pegasus 40 – giày chạy bộ hiệu năng cao.'),
+('Nike React Element 55', 'Nike', 'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/fedc4321-react-element-55.png', 'https://sketchfab.com/3d-models/nike-react-element-55-3d-model-example.glb', 'Nike React Element 55 – đệm React nhẹ & êm.'),
+('Nike Air Presto', 'Nike', 'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/99887766-air-presto.png', 'https://sketchfab.com/3d-models/nike-air-presto-3d-model-example.glb', 'Nike Air Presto – thiết kế co giãn, ôm chân.'),
+('Nike Zoom Vomero 5', 'Nike', 'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/12345678-zoom-vomero-5.png', 'https://sketchfab.com/3d-models/nike-zoom-vomero-5-3d-model-example.glb', 'Nike Zoom Vomero 5 – giày chạy có đệm Zoom thoải mái.');
+
+-- Sau đó thêm ChiTietSanPham (kích cỡ, số lượng, giá nhập / xuất)
+INSERT INTO ChiTietSanPham (MaSanPham, KichThuoc, SoLuong, GiaNhap, GiaXuat) VALUES
+((SELECT MaSanPham FROM SanPham WHERE TenSanPham = 'Nike Air Force 1'), '40', 20, 1200000, 2000000),
+((SELECT MaSanPham FROM SanPham WHERE TenSanPham = 'Nike Air Force 1'), '42', 15, 1200000, 2000000),
+((SELECT MaSanPham FROM SanPham WHERE TenSanPham = 'Nike Dunk Low'), '41', 25, 1100000, 1850000),
+((SELECT MaSanPham FROM SanPham WHERE TenSanPham = 'Nike Dunk Low'), '43', 10, 1100000, 1850000),
+((SELECT MaSanPham FROM SanPham WHERE TenSanPham = 'Nike Air Max 1'), '44', 12, 1500000, 2600000),
+((SELECT MaSanPham FROM SanPham WHERE TenSanPham = 'Nike Air Max 1'), '46', 8, 1500000, 2600000),
+((SELECT MaSanPham FROM SanPham WHERE TenSanPham = 'Nike Air Max 90'), '42', 18, 1400000, 2500000),
+((SELECT MaSanPham FROM SanPham WHERE TenSanPham = 'Nike Blazer Mid'), '44', 10, 1300000, 2200000),
+((SELECT MaSanPham FROM SanPham WHERE TenSanPham = 'Nike Cortez'), '41', 30, 1000000, 1600000),
+((SELECT MaSanPham FROM SanPham WHERE TenSanPham = 'Nike Pegasus 40'), '43', 15, 1600000, 3000000),
+((SELECT MaSanPham FROM SanPham WHERE TenSanPham = 'Nike React Element 55'), '42', 12, 1700000, 3200000),
+((SELECT MaSanPham FROM SanPham WHERE TenSanPham = 'Nike Air Presto'), '44', 8, 1500000, 2800000),
+((SELECT MaSanPham FROM SanPham WHERE TenSanPham = 'Nike Zoom Vomero 5'), '45', 5, 1800000, 3500000);
+
+
+select * from DonHang;
+
+SELECT dh.MaDonHang, ctdh.MaChiTietSanPham, ctdh.SoLuong, sp.TenSanPham
+FROM DonHang dh
+JOIN ChiTietDonHang ctdh ON dh.MaDonHang = ctdh.MaDonHang
+JOIN ChiTietSanPham ctp ON ctdh.MaChiTietSanPham = ctp.MaChiTietSanPham
+JOIN SanPham sp ON ctp.MaSanPham = sp.MaSanPham
+WHERE dh.MaTaiKhoan = 1;
+
+

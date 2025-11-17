@@ -26,12 +26,13 @@
     <section class="checkout-container mt-5 pt-5">
         <div class="container my-5">
             <div class="row justify-content-center">
+
                 <!-- LEFT: Thông tin giao hàng -->
                 <div class="col-lg-8 col-md-7">
                     <h3 class="fw-bold mb-4">THANH TOÁN</h3>
 
-                    <!-- Tùy chọn giao hàng -->
-                    <section class="delivery-section mb-5">
+                    <!-- 1. Tùy chọn giao hàng -->
+                    <section class="delivery-section mb-4">
                         <h5 class="fw-bold mb-3">1. TÙY CHỌN GIAO HÀNG</h5>
 
                         <div class="form-check mb-3">
@@ -51,116 +52,78 @@
                         </div>
                     </section>
 
-                    <!-- Form địa chỉ -->
-                    <section class="address-section mb-5">
-                        <h5 class="fw-bold mb-3">2. ĐĂNG KÝ MỘT ĐỊA CHỈ MỚI</h5>
-
-                        <form id="addressForm" class="checkout-form">
+                    <!-- 2. Form địa chỉ -->
+                    <section class="address-section mb-4">
+                        <h5 class="fw-bold mb-3">2. THÔNG TIN GIAO HÀNG</h5>
+                        <form id="checkoutForm" class="checkout-form">
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label class="form-label">Họ*</label>
-                                    <input type="text" class="form-control" placeholder="Nhập họ của bạn" required>
+                                    <label class="form-label">Địa chỉ giao hàng</label>
+                                    <input type="text" class="form-control" id="address"
+                                        placeholder="Ví dụ: Số nhà 12, đường Lê Lợi" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Tên*</label>
-                                    <input type="text" class="form-control" placeholder="Nhập tên của bạn" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Tỉnh/Thành phố*</label>
-                                    <select class="form-select">
-                                        <option>Chọn tỉnh/thành</option>
-                                        <option>Hà Nội</option>
-                                        <option>TP. Hồ Chí Minh</option>
-                                        <option>Đà Nẵng</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Quận/Huyện*</label>
-                                    <select class="form-select">
-                                        <option>Chọn quận/huyện</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Phường/Xã*</label>
-                                    <select class="form-select">
-                                        <option>Chọn phường/xã</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Chi tiết địa chỉ*</label>
-                                    <input type="text" class="form-control"
-                                        placeholder="Ví dụ: Số nhà 12, đường Lê Lợi">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Số điện thoại*</label>
-                                    <input type="tel" class="form-control" placeholder="Nhập số điện thoại" required>
+                                    <label class="form-label">Số điện thoại</label>
+                                    <input type="tel" class="form-control" id="phone" required>
                                 </div>
                             </div>
                         </form>
-
-                        <!-- PHƯƠNG THỨC THANH TOÁN -->
-                        
-
                     </section>
 
-                    <section class="payment-section mb-5">
-                            <h5 class="fw-bold mb-3">3. PHƯƠNG THỨC THANH TOÁN</h5>
+                    <!-- 3. Phương thức thanh toán -->
+                    <section class="payment-section mb-4">
+                        <h5 class="fw-bold mb-3">3. PHƯƠNG THỨC THANH TOÁN</h5>
 
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="radio" name="payment" id="cod" checked>
-                                <label class="form-check-label" for="cod">
-                                    <strong>Thanh toán khi nhận hàng (COD)</strong><br>
-                                    Bạn sẽ thanh toán tiền mặt cho nhân viên giao hàng khi nhận được sản phẩm.
-                                </label>
-                            </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="payment" id="cod" checked>
+                            <label class="form-check-label" for="cod">
+                                <strong>Thanh toán khi nhận hàng (COD)</strong><br>
+                                Thanh toán tiền mặt khi nhận sản phẩm.
+                            </label>
+                        </div>
 
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="radio" name="payment" id="momo">
-                                <label class="form-check-label" for="momo">
-                                    <strong>Thanh toán qua Momo</strong><br>
-                                    Quét mã QR để thanh toán nhanh chóng qua ví Momo.
-                                </label>
-                            </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="payment" id="momo">
+                            <label class="form-check-label" for="momo">
+                                <strong>Thanh toán qua Momo</strong><br>
+                                Quét mã QR để thanh toán nhanh.
+                            </label>
+                        </div>
 
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="radio" name="payment" id="vnpay">
-                                <label class="form-check-label" for="vnpay">
-                                    <strong>Thanh toán qua VNPay / Thẻ ngân hàng</strong><br>
-                                    Hỗ trợ thẻ ATM, Visa, Mastercard.
-                                </label>
-                            </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="payment" id="zalopay">
+                            <label class="form-check-label" for="zalopay">
+                                <strong>Thanh toán qua ZaloPay</strong><br>
+                                Quét QR hoặc dùng ZaloPay để thanh toán nhanh chóng.
+                            </label>
+                        </div>
 
-                            <button type="submit" class="btn btn-dark mt-4 px-5 py-2">TIẾP TỤC THANH TOÁN</button>
-                        </section>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="payment" id="zalopay">
+                            <label class="form-check-label" for="vnpay">
+                                <strong>Thanh toán qua VNPay</strong><br>
+                                Quét QR hoặc dùng ZNPay để thanh toán nhanh chóng.
+                            </label>
+                        </div>
+
+                        <button type="button" id="btnCheckout" class="btn btn-dark mt-4 px-5 py-2">TIẾP TỤC THANH
+                            TOÁN</button>
+                    </section>
                 </div>
 
                 <!-- RIGHT: Tóm tắt đơn hàng -->
                 <div class="col-lg-4 col-md-5">
                     <div class="order-summary bg-white p-4 shadow-sm rounded">
                         <h5 class="fw-bold mb-4">TỔNG ĐƠN HÀNG</h5>
-
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Tổng sản phẩm (1)</span>
-                            <span>1.471.000 VNĐ</span>
-                        </div>
-
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Phí vận chuyển</span>
-                            <span>30.000 VNĐ</span>
-                        </div>
-
+                        <div id="cartItems"></div>
                         <hr>
-
                         <div class="d-flex justify-content-between fw-bold">
                             <span>Tổng cộng</span>
-                            <span class="text-danger">1.501.000 VNĐ</span>
-                        </div>
-
-                        <div class="text-center mt-3">
-                            <a href="#" class="text-decoration-none small">Chỉnh sửa giỏ hàng</a>
+                            <span class="text-danger" id="totalAmount">0 VNĐ</span>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -329,6 +292,9 @@
             </div>
         </div>
     </footer>
+
+    <script src="Checkout_show.js"></script>
+    <script src="Checkout_submit.js"></script>
 </body>
 
 </html>
