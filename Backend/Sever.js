@@ -11,6 +11,9 @@ const cartRoutes = require("./Route/GioHang");
 const commentRoutes = require("./Route/BinhLuan");
 const orderRoutes = require("./Route/DonHang");
 
+//Import routes quanly
+const adminRoutes = require("./Route/Admin");
+
 
 const app = express();
 const port = 3000;
@@ -32,6 +35,7 @@ app.use("/api/comment", commentRoutes);
 app.use("/api/order", orderRoutes);
 
 //Routes quanly
+app.use("/api/admin", adminRoutes);
 
 
 // Start server
