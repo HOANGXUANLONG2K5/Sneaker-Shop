@@ -50,3 +50,14 @@ exports.getOrdersByUser = async (req, res) => {
         res.status(500).json({ message: "Lỗi khi lấy lịch sử", error: err.toString() });
     }
 };
+
+exports.getOrderDetail = async (req, res) => {
+    try {
+        const orderId = req.params.orderId;
+        const details = await OrderHelper.getOrderDetail(orderId);
+        res.json(details);
+    } catch (err) {
+        res.status(500).json({ message: "Lỗi khi lấy chi tiết đơn hàng" });
+    }
+};
+

@@ -23,15 +23,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Cho phép truy cập các file trong folder 'uploads'
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Routes khach
+// Routes
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/productdetails", productDetailRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/comment", commentRoutes);
 app.use("/api/order", orderRoutes);
-
-//Routes quanly
 
 
 // Start server

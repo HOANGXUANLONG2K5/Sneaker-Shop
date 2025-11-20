@@ -84,7 +84,24 @@ const OrderHelper = {
                 resolve(results); 
             });
         });
-    }
+    },
+
+    async getOrderDetail(orderId) {
+    return new Promise((resolve, reject) => {
+        const sql = `
+            SELECT ctdh.*, sp.TenSanPham 
+            FROM ChiTietDonHang ctdh
+            JOIN ChiTietSanPham ctsp ON ctdh.MaChiTietSanPham = ctsp.MaChiTietSanPham
+            JOIN SanPham sp ON ctsp.MaSanPham = sp.MaSanPham
+            WHERE ctdh.MaDonHang = ?
+        `;
+        db.query(sql, [orderId], (err, results) => {
+            if (err) return reject(err);
+            resolve(results);
+        });
+    });
+}
+
 
 };
 

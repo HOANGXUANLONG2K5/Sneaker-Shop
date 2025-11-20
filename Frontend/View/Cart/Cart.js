@@ -17,12 +17,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    cartContainer.innerHTML = ''; // xóa cũ trước khi render
+    cartContainer.innerHTML = '';
 
     let total = 0;
 
     cartItems.forEach(item => {
-      const itemTotal = item.SoLuong * item.GiaXuat; // giá từ DB
+      const itemTotal = item.SoLuong * item.GiaXuat; 
       total += itemTotal;
 
       const div = document.createElement('div');
