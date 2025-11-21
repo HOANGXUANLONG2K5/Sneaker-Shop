@@ -49,7 +49,7 @@ class AdminOrderView {
     this.diaChiGiaoToi        = diaChiGiaoToi;
     this.soDienThoai          = soDienThoai;
     this.tongTien             = tongTien;
-    this.phuongThucThanhToan = phuongThucThanhToan;
+    this.phuongThucThanhToan  = phuongThucThanhToan;
     this.soTienThanhToan      = soTienThanhToan;
     this.trangThaiThanhToan   = trangThaiThanhToan;
     this.ngayThanhToan        = ngayThanhToan;

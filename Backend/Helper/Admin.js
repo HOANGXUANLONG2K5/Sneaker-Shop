@@ -7,6 +7,42 @@ const {
   ProductAdminSummary
 } = require('../Model/Admin');
 
+// Hàm dùng chung: lấy summary 1 sản phẩm theo MaSanPham
+function getProductSummaryById(maSanPham) {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      SELECT
+        sp.MaSanPham,
+        sp.TenSanPham,
+        sp.ThuongHieu,
+        sp.Anh,
+        sp.Model3D,
+        sp.MoTa,
+        IFNULL(SUM(ctsp.SoLuong), 0) AS TongSoLuong,
+        MIN(ctsp.GiaXuat)            AS GiaThapNhat,
+        MAX(ctsp.GiaXuat)            AS GiaCaoNhat
+      FROM SanPham sp
+      LEFT JOIN ChiTietSanPham ctsp
+        ON sp.MaSanPham = ctsp.MaSanPham
+      WHERE sp.MaSanPham = ?
+      GROUP BY
+        sp.MaSanPham,
+        sp.TenSanPham,
+        sp.ThuongHieu,
+        sp.Anh,
+        sp.Model3D,
+        sp.MoTa
+    `;
+
+    db.query(sql, [maSanPham], (err, rows) => {
+      if (err) return reject(err);
+      if (!rows.length) return resolve(null);
+      const product = ProductAdminSummary.fromRow(rows[0]);
+      resolve(product);
+    });
+  });
+}
+
 const AdminHelper = {
   // ====== DASHBOARD ======
   getDashboardStats: () => {
@@ -24,7 +60,6 @@ const AdminHelper = {
 
       db.query(sql, (err, results) => {
         if (err) return reject(err);
-        // Dùng Model
         const stats = DashboardStats.fromRow(results[0]);
         resolve(stats);
       });
@@ -65,8 +100,6 @@ const AdminHelper = {
 
       db.query(sql, params, (err, rows) => {
         if (err) return reject(err);
-
-        // Map mỗi row thành AdminOrderView
         const orders = rows.map(row => AdminOrderView.fromRow(row));
         resolve(orders);
       });
@@ -105,14 +138,13 @@ const AdminHelper = {
 
       db.query(sql, (err, rows) => {
         if (err) return reject(err);
-
         const users = rows.map(row => AdminUserView.fromRow(row));
         resolve(users);
       });
     });
   },
 
-  // ====== SẢN PHẨM ======
+  // ====== SẢN PHẨM – LIST TÓM TẮT ======
   getAllProductsWithSummary: () => {
     return new Promise((resolve, reject) => {
       const sql = `
@@ -141,9 +173,102 @@ const AdminHelper = {
 
       db.query(sql, (err, rows) => {
         if (err) return reject(err);
-
         const products = rows.map(row => ProductAdminSummary.fromRow(row));
         resolve(products);
+      });
+    });
+  },
+
+  // ====== SẢN PHẨM – THÊM MỚI ======
+  // input: { tenSanPham, thuongHieu, anh, model3D, moTa }
+  createProduct: (payload) => {
+    return new Promise((resolve, reject) => {
+      const {
+        tenSanPham,
+        thuongHieu = null,
+        anh = null,
+        model3D = null,
+        moTa = null
+      } = payload;
+
+      const sqlInsert = `
+        INSERT INTO SanPham (TenSanPham, ThuongHieu, Anh, Model3D, MoTa)
+        VALUES (?, ?, ?, ?, ?)
+      `;
+
+      db.query(
+        sqlInsert,
+        [tenSanPham, thuongHieu, anh, model3D, moTa],
+        (err, result) => {
+          if (err) return reject(err);
+          const newId = result.insertId;
+          // Lấy lại summary cho sản phẩm mới tạo
+          getProductSummaryById(newId)
+            .then(product => resolve(product))
+            .catch(reject);
+        }
+      );
+    });
+  },
+
+  // ====== SẢN PHẨM – CẬP NHẬT ======
+  // input: (maSanPham, { tenSanPham, thuongHieu, anh, model3D, moTa })
+  updateProduct: (maSanPham, payload) => {
+    return new Promise((resolve, reject) => {
+      const {
+        tenSanPham,
+        thuongHieu = null,
+        anh = null,
+        model3D = null,
+        moTa = null
+      } = payload;
+
+      const sqlUpdate = `
+        UPDATE SanPham
+        SET TenSanPham = ?,
+            ThuongHieu = ?,
+            Anh        = ?,
+            Model3D    = ?,
+            MoTa       = ?
+        WHERE MaSanPham = ?
+      `;
+
+      db.query(
+        sqlUpdate,
+        [tenSanPham, thuongHieu, anh, model3D, moTa, maSanPham],
+        (err, result) => {
+          if (err) return reject(err);
+          if (result.affectedRows === 0) {
+            // Không tìm thấy sản phẩm
+            return resolve(null);
+          }
+          // Lấy lại summary mới
+          getProductSummaryById(maSanPham)
+            .then(product => resolve(product))
+            .catch(reject);
+        }
+      );
+    });
+  },
+
+  // ====== SẢN PHẨM – XOÁ ======
+  deleteProduct: (maSanPham) => {
+    return new Promise((resolve, reject) => {
+      // Xoá chi tiết sản phẩm trước (tránh lỗi FK)
+      const sqlDeleteDetails = `
+        DELETE FROM ChiTietSanPham WHERE MaSanPham = ?
+      `;
+      db.query(sqlDeleteDetails, [maSanPham], (err) => {
+        if (err) return reject(err);
+
+        // Sau đó xoá sản phẩm
+        const sqlDeleteProduct = `
+          DELETE FROM SanPham WHERE MaSanPham = ?
+        `;
+        db.query(sqlDeleteProduct, [maSanPham], (err2, result) => {
+          if (err2) return reject(err2);
+          resolve(result); // result.affectedRows để controller xử lý
+        });
       });
     });
   }
