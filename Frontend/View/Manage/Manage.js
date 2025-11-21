@@ -374,11 +374,15 @@ async function loadCustomers() {
 }
 
 // ====== TOP SẢN PHẨM BÁN CHẠY (ECharts + backend) ======
+
+// Giữ một instance duy nhất của chart
+let topProductChartInstance = null;
+
 async function loadTopProducts() {
   const chartDom = document.getElementById("topProductChart");
   if (!chartDom) return;
 
-  chartDom.innerHTML = ""; // clear text nếu có
+  // Không xóa chartDom.innerHTML bừa nữa, chỉ xử lý khi không có data / lỗi
 
   try {
     const res = await fetch(`${BASE_URL}/api/admin/products/top-selling?limit=5`);
@@ -386,20 +390,37 @@ async function loadTopProducts() {
     const data = await res.json(); // [{maSanPham, tenSanPham, tongSoLuongBan}, ...]
 
     if (!data.length) {
-      chartDom.innerHTML = "<p class='text-center text-muted'>Chưa có dữ liệu đơn hàng để thống kê.</p>";
+      // Nếu trước đó có chart thì dispose
+      if (topProductChartInstance) {
+        topProductChartInstance.dispose();
+        topProductChartInstance = null;
+      }
+      chartDom.innerHTML =
+        "<p class='text-center text-muted'>Chưa có dữ liệu đơn hàng để thống kê.</p>";
       return;
     }
 
+    // Có dữ liệu thì vẽ chart
     renderTopProductChart(data);
   } catch (err) {
     console.error("Lỗi loadTopProducts:", err);
-    chartDom.innerHTML = "<p class='text-center text-danger'>Lỗi tải dữ liệu thống kê.</p>";
+    if (topProductChartInstance) {
+      topProductChartInstance.dispose();
+      topProductChartInstance = null;
+    }
+    chartDom.innerHTML =
+      "<p class='text-center text-danger'>Lỗi tải dữ liệu thống kê.</p>";
   }
 }
 
 function renderTopProductChart(topData) {
   const chartDom = document.getElementById("topProductChart");
-  const myChart = echarts.init(chartDom);
+  if (!chartDom) return;
+
+  // Nếu đã có chart trước đó thì dùng lại, không init mới
+  if (!topProductChartInstance) {
+    topProductChartInstance = echarts.init(chartDom);
+  }
 
   const names = topData.map((p) => p.tenSanPham);
   const values = topData.map((p) => p.tongSoLuongBan);
@@ -442,9 +463,23 @@ function renderTopProductChart(topData) {
     ],
   };
 
-  myChart.setOption(option);
-  window.addEventListener("resize", () => myChart.resize());
+  topProductChartInstance.setOption(option);
+
+  // Gọi resize sau khi tab hiển thị lại
+  setTimeout(() => {
+    if (topProductChartInstance) {
+      topProductChartInstance.resize();
+    }
+  }, 0);
 }
+
+// Lắng nghe resize cửa sổ cho chart
+window.addEventListener("resize", () => {
+  if (topProductChartInstance) {
+    topProductChartInstance.resize();
+  }
+});
+
 
 // ====== KHỞI ĐỘNG: load dashboard khi vừa vào trang ======
 loadDashboard();
