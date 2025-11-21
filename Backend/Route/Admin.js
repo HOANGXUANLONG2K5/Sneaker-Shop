@@ -13,7 +13,16 @@ router.put('/orders/:orderId/status', adminController.updateOrderStatus);
 // Tài khoản
 router.get('/users', adminController.getAllUsers);
 
-// Sản phẩm
+// Sản phẩm – list
 router.get('/products', adminController.getAllProducts);
+
+// Sản phẩm – thêm mới
+router.post('/products', adminController.createProduct);
+
+// Sản phẩm – cập nhật
+router.put('/products/:id', adminController.updateProduct);
+
+// Sản phẩm – xoá
+router.delete('/products/:id', adminController.deleteProduct);
 
 module.exports = router;
