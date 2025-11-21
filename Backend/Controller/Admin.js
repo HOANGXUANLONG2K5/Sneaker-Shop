@@ -68,6 +68,21 @@ exports.getAllProducts = async (req, res) => {
   }
 };
 
+// ===== SẢN PHẨM – TOP BÁN CHẠY =====
+// GET /api/admin/products/top-selling?limit=5
+exports.getTopProducts = async (req, res) => {
+  try {
+    let limit = parseInt(req.query.limit);
+    if (isNaN(limit) || limit <= 0) limit = 5;
+
+    const topProducts = await AdminHelper.getTopSellingProducts(limit);
+    res.json(topProducts);
+  } catch (err) {
+    console.error("Lỗi getTopProducts:", err);
+    res.status(500).json({ message: "Lỗi server" });
+  }
+};
+
 // ===== SẢN PHẨM – THÊM MỚI =====
 // POST /api/admin/products
 // body: { tenSanPham, thuongHieu?, anh?, model3D?, moTa? }

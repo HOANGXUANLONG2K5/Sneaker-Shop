@@ -4,7 +4,8 @@ const {
   DashboardStats,
   AdminOrderView,
   AdminUserView,
-  ProductAdminSummary
+  ProductAdminSummary,
+  TopProductStats
 } = require('../Model/Admin');
 
 // Hàm dùng chung: lấy summary 1 sản phẩm theo MaSanPham
@@ -175,6 +176,33 @@ const AdminHelper = {
         if (err) return reject(err);
         const products = rows.map(row => ProductAdminSummary.fromRow(row));
         resolve(products);
+      });
+    });
+  },
+
+  // ====== SẢN PHẨM – TOP BÁN CHẠY ======
+  // trả về mảng top sản phẩm: { maSanPham, tenSanPham, tongSoLuongBan }
+  getTopSellingProducts: (limit = 5) => {
+    return new Promise((resolve, reject) => {
+      const sql = `
+        SELECT
+          sp.MaSanPham,
+          sp.TenSanPham,
+          SUM(ctdh.SoLuong) AS TongSoLuongBan
+        FROM ChiTietDonHang ctdh
+        JOIN ChiTietSanPham ctp
+          ON ctdh.MaChiTietSanPham = ctp.MaChiTietSanPham
+        JOIN SanPham sp
+          ON ctp.MaSanPham = sp.MaSanPham
+        GROUP BY sp.MaSanPham, sp.TenSanPham
+        ORDER BY TongSoLuongBan DESC
+        LIMIT ?
+      `;
+
+      db.query(sql, [limit], (err, rows) => {
+        if (err) return reject(err);
+        const result = rows.map(row => TopProductStats.fromRow(row));
+        resolve(result);
       });
     });
   },

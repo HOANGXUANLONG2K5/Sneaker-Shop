@@ -156,9 +156,28 @@ class ProductAdminSummary {
   }
 }
 
+// ===== Sản Phẩm Bán Chạy Nhất =====
+class TopProductStats {
+  constructor(maSanPham, tenSanPham, tongSoLuongBan) {
+    this.maSanPham = maSanPham;
+    this.tenSanPham = tenSanPham;
+    this.tongSoLuongBan = tongSoLuongBan;
+  }
+
+  static fromRow(row) {
+    return new TopProductStats(
+      row.MaSanPham,
+      row.TenSanPham,
+      row.TongSoLuongBan
+    );
+  }
+}
+
+// Export các class
 module.exports = {
   DashboardStats,
   AdminOrderView,
   AdminUserView,
-  ProductAdminSummary
+  ProductAdminSummary,
+  TopProductStats
 };

@@ -16,6 +16,9 @@ router.get('/users', adminController.getAllUsers);
 // Sản phẩm – list
 router.get('/products', adminController.getAllProducts);
 
+// Top bán chạy
+router.get('/products/top-selling', adminController.getTopProducts);
+
 // Sản phẩm – thêm mới
 router.post('/products', adminController.createProduct);
 
